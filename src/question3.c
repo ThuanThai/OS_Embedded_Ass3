@@ -1,6 +1,8 @@
 #include "question3.h"
 #include "uart.h"
 
+#define MAX_SHOT 30
+
 void clearCurrentFire(int startX, int startY) {
     int x = 1;
     int y = 1;
@@ -67,8 +69,94 @@ void displaySpcaeShip(int startX, int startY) {
     }
 }
 
-void clearMultipleShot(int x_fire_arr[], int y_fire_arr[], int last_x_fire_arr[], int last_y_arr[], int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[]) {
+void clearMultipleShot(int x_fire_arr[], int y_fire_arr[], int last_x_fire_arr[], int last_y_arr[], int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[], int x, int y) {
+    
+    for (int i = 0; i < MAX_SHOT; i++) {
+        if (last_x_fire_arr[i] != x_fire_arr[i]) {
+            clearCurrentFire(shooting_x_arr[i] + last_x_fire_arr[i], shooting_y_arr[i] + y_fire_arr[i]);
+            if (x_fire_arr[i] + 10 > 850) {
+                shooting_y_arr[i] = y;
+            }
+            last_x_fire_arr[i] = x_fire_arr[i];
+        }
+    }
+}
 
+void displayMultipleShots(int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[], int x_fire_arr[], int y_fire_arr[]) {
+    for (int i = 0; i < MAX_SHOT; i++) {
+        if (shooting_command_arr[i] == 1) {
+            displayFire(shooting_x_arr[i] + x_fire_arr[i], shooting_y_arr[i] + y_fire_arr[i]);
+        }
+    }
+}
+
+void displayNumber(int i) {
+    switch (i)
+    {
+    case 0:
+        uart_sendc('0');
+        break;
+    case 1:
+        uart_sendc('1');
+        break;
+    case 2:
+        uart_sendc('2');
+        break;
+    case 3:
+        uart_sendc('3');
+        break;
+    case 4:
+        uart_sendc('4');
+        break;
+    case 5:
+        uart_sendc('5');
+        break;
+    case 6:
+        uart_sendc('6');
+        break;
+    case 7:
+        uart_sendc('7');
+        break;
+    case 8:
+        uart_sendc('8');
+        break;
+    case 9:
+        uart_sendc('9');
+        break;
+    default:
+        break;
+    }
+}
+
+void shoot(int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[], int x_fire_arr[], int y_fire_arr[], int x_fire_from_ship) {
+    for (int i = 0; i < MAX_SHOT; i++) {
+        if (shooting_command_arr[i] == 1) {
+            
+            x_fire_arr[i] += 5;
+            if (x_fire_arr[i] + 5 > 850) {
+                x_fire_arr[i] = x_fire_from_ship;
+                shooting_command_arr[i] = 0;
+            }
+        }
+        
+    }
+}
+
+void enableShot(int *shotCount, int shooting_command_arr[], int x, int y, int shooting_x_arr[], int shooting_y_arr[]) {
+    if ((*shotCount) + 1 < MAX_SHOT) {
+        (*shotCount) += 1;
+        for (int i = 0; i < (*shotCount); i++) {
+            if (shooting_command_arr[i] != 1) {
+                shooting_command_arr[i] = 1;
+                shooting_x_arr[i] = x;
+                shooting_y_arr[i] = y;
+                break;
+            }
+        }
+        if ((*shotCount) == MAX_SHOT - 1) {
+            (*shotCount) = 0;
+        }
+    }
 }
 
 void gamePlay() {
@@ -101,13 +189,16 @@ void gamePlay() {
     int y_fire_from_ship = 50;
 
     // implementing multiple shot
-    int x_fire_arr[1] = {x_fire_from_ship};
-    int y_fire_arr[1] = {y_fire_from_ship};
-    int last_x_fire_arr[1] = {x_fire_arr[0]};
-    int last_y_arr[1] = {y};
-    int shooting_command_arr[1] = {1};
-    int shooting_x_arr[1] = {x};
-    int shooting_y_arr[1] = {y};
+    int x_fire_arr[MAX_SHOT] = {x_fire_from_ship};
+    int y_fire_arr[MAX_SHOT] = {y_fire_from_ship};
+    int last_x_fire_arr[MAX_SHOT] = {x_fire_arr[0]};
+    int last_y_arr[MAX_SHOT] = {y};
+    int shooting_command_arr[MAX_SHOT] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    for (int i = 0; i < MAX_SHOT; i++) {
+        shooting_command_arr[i] = 0;
+    }
+    int shooting_x_arr[MAX_SHOT] = {x};
+    int shooting_y_arr[MAX_SHOT] = {y};
     //-------------------------------------
 
     int x_fire = x_fire_from_ship; // array
@@ -120,6 +211,8 @@ void gamePlay() {
     int shooting_x = x; 
     int shooting_y = y;
 
+    //shot tracking
+    int shotCount = 0;
     while (1)
     {
         if (r >= expiredTime) {
@@ -128,18 +221,12 @@ void gamePlay() {
                 last_y = y;
             }
 
-            if (last_x_fire != x_fire) {
-                clearCurrentFire(shooting_x + last_x_fire, shooting_y + y_fire);
-                if (x_fire + 10 > 850) {
-                    shooting_y = y;
-                }
-                last_x_fire = x_fire;
-            }
+            // shot clearing code
+            clearMultipleShot(x_fire_arr, y_fire_arr, last_x_fire_arr, last_y_arr, shooting_command_arr, shooting_x_arr, shooting_y_arr, x, y);
             displaySpcaeShip(x, y);
             
-            if (shooting == 1) {
-                displayFire(shooting_x + x_fire, shooting_y + y_fire);
-            }
+            // shot display code
+            displayMultipleShots(shooting_command_arr, shooting_x_arr, shooting_y_arr, x_fire_arr, y_fire_arr);
             asm volatile ("mrs %0, cntfrq_el0" : "=r"(f));
             // Read the current counter value
             asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
@@ -151,14 +238,8 @@ void gamePlay() {
 
         if (r_fire >= expiredTime_fire) {
             
-            if (shooting == 1) {
-                x_fire += 5;
-                if (x_fire + 5 > 850) {
-                    
-                    x_fire = x_fire_from_ship;
-                    shooting = 0;
-                }
-            }
+            // shot moving code
+            shoot(shooting_command_arr, shooting_x_arr, shooting_y_arr, x_fire_arr, y_fire_arr, x_fire_from_ship);
             asm volatile ("mrs %0, cntfrq_el0" : "=r"(f_fire));
             // Read the current counter value
             asm volatile ("mrs %0, cntpct_el0" : "=r"(t_fire));
@@ -186,7 +267,7 @@ void gamePlay() {
             }
 
             if (c == 'k') {
-                shooting = 1;
+                enableShot(&shotCount, shooting_command_arr, x, y, shooting_x_arr, shooting_y_arr);
             }
 
             if (c == 127) {
