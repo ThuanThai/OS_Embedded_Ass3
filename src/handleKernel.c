@@ -1,6 +1,6 @@
 #include "handleKernel.h"
 #include "imagePixel.h"
-#include "vFrames.h"
+#include "question3.h"
 #define SPACE_LEN 20
 #define FRAMES_LEN 100
 scrollPosition = 0;
@@ -11,107 +11,107 @@ unsigned int *images[] = {
     image2, // Pointer to your image data 2
     // Add more image pointers as needed
 };
-unsigned int *frames[] = {
-    epd_bitmap_ezgif_frame_001,
-    epd_bitmap_ezgif_frame_002,
-    epd_bitmap_ezgif_frame_003,
-    epd_bitmap_ezgif_frame_004,
-    epd_bitmap_ezgif_frame_005,
-    epd_bitmap_ezgif_frame_006,
-    epd_bitmap_ezgif_frame_007,
-    epd_bitmap_ezgif_frame_008,
-    epd_bitmap_ezgif_frame_009,
-    epd_bitmap_ezgif_frame_010,
-    epd_bitmap_ezgif_frame_011,
-    epd_bitmap_ezgif_frame_012,
-    epd_bitmap_ezgif_frame_013,
-    epd_bitmap_ezgif_frame_014,
-    epd_bitmap_ezgif_frame_015,
-    epd_bitmap_ezgif_frame_016,
-    epd_bitmap_ezgif_frame_017,
-    epd_bitmap_ezgif_frame_018,
-    epd_bitmap_ezgif_frame_019,
-    epd_bitmap_ezgif_frame_020,
-    epd_bitmap_ezgif_frame_021,
-    epd_bitmap_ezgif_frame_022,
-    epd_bitmap_ezgif_frame_023,
-    epd_bitmap_ezgif_frame_024,
-    epd_bitmap_ezgif_frame_025,
-    epd_bitmap_ezgif_frame_026,
-    epd_bitmap_ezgif_frame_027,
-    epd_bitmap_ezgif_frame_028,
-    epd_bitmap_ezgif_frame_029,
-    epd_bitmap_ezgif_frame_030,
-    epd_bitmap_ezgif_frame_031,
-    epd_bitmap_ezgif_frame_032,
-    epd_bitmap_ezgif_frame_033,
-    epd_bitmap_ezgif_frame_034,
-    epd_bitmap_ezgif_frame_035,
-    epd_bitmap_ezgif_frame_036,
-    epd_bitmap_ezgif_frame_037,
-    epd_bitmap_ezgif_frame_038,
-    epd_bitmap_ezgif_frame_039,
-    epd_bitmap_ezgif_frame_040,
-    epd_bitmap_ezgif_frame_041,
-    epd_bitmap_ezgif_frame_042,
-    epd_bitmap_ezgif_frame_043,
-    epd_bitmap_ezgif_frame_044,
-    epd_bitmap_ezgif_frame_045,
-    epd_bitmap_ezgif_frame_046,
-    epd_bitmap_ezgif_frame_047,
-    epd_bitmap_ezgif_frame_048,
-    epd_bitmap_ezgif_frame_049,
-    epd_bitmap_ezgif_frame_050,
-    epd_bitmap_ezgif_frame_051,
-    epd_bitmap_ezgif_frame_052,
-    epd_bitmap_ezgif_frame_053,
-    epd_bitmap_ezgif_frame_054,
-    epd_bitmap_ezgif_frame_055,
-    epd_bitmap_ezgif_frame_056,
-    epd_bitmap_ezgif_frame_057,
-    epd_bitmap_ezgif_frame_058,
-    epd_bitmap_ezgif_frame_059,
-    epd_bitmap_ezgif_frame_060,
-    epd_bitmap_ezgif_frame_061,
-    epd_bitmap_ezgif_frame_062,
-    epd_bitmap_ezgif_frame_063,
-    epd_bitmap_ezgif_frame_064,
-    epd_bitmap_ezgif_frame_065,
-    epd_bitmap_ezgif_frame_066,
-    epd_bitmap_ezgif_frame_067,
-    epd_bitmap_ezgif_frame_068,
-    epd_bitmap_ezgif_frame_069,
-    epd_bitmap_ezgif_frame_070,
-    epd_bitmap_ezgif_frame_071,
-    epd_bitmap_ezgif_frame_072,
-    epd_bitmap_ezgif_frame_073,
-    epd_bitmap_ezgif_frame_074,
-    epd_bitmap_ezgif_frame_075,
-    epd_bitmap_ezgif_frame_076,
-    epd_bitmap_ezgif_frame_077,
-    epd_bitmap_ezgif_frame_078,
-    epd_bitmap_ezgif_frame_079,
-    epd_bitmap_ezgif_frame_080,
-    epd_bitmap_ezgif_frame_081,
-    epd_bitmap_ezgif_frame_082,
-    epd_bitmap_ezgif_frame_083,
-    epd_bitmap_ezgif_frame_084,
-    epd_bitmap_ezgif_frame_085,
-    epd_bitmap_ezgif_frame_086,
-    epd_bitmap_ezgif_frame_087,
-    epd_bitmap_ezgif_frame_088,
-    epd_bitmap_ezgif_frame_089,
-    epd_bitmap_ezgif_frame_090,
-    epd_bitmap_ezgif_frame_091,
-    epd_bitmap_ezgif_frame_092,
-    epd_bitmap_ezgif_frame_093,
-    epd_bitmap_ezgif_frame_094,
-    epd_bitmap_ezgif_frame_095,
-    epd_bitmap_ezgif_frame_096,
-    epd_bitmap_ezgif_frame_097,
-    epd_bitmap_ezgif_frame_098,
-    epd_bitmap_ezgif_frame_099,
-    epd_bitmap_ezgif_frame_100};
+// unsigned int *frames[] = {
+//     epd_bitmap_ezgif_frame_001,
+//     epd_bitmap_ezgif_frame_002,
+//     epd_bitmap_ezgif_frame_003,
+//     epd_bitmap_ezgif_frame_004,
+//     epd_bitmap_ezgif_frame_005,
+//     epd_bitmap_ezgif_frame_006,
+//     epd_bitmap_ezgif_frame_007,
+//     epd_bitmap_ezgif_frame_008,
+//     epd_bitmap_ezgif_frame_009,
+//     epd_bitmap_ezgif_frame_010,
+//     epd_bitmap_ezgif_frame_011,
+//     epd_bitmap_ezgif_frame_012,
+//     epd_bitmap_ezgif_frame_013,
+//     epd_bitmap_ezgif_frame_014,
+//     epd_bitmap_ezgif_frame_015,
+//     epd_bitmap_ezgif_frame_016,
+//     epd_bitmap_ezgif_frame_017,
+//     epd_bitmap_ezgif_frame_018,
+//     epd_bitmap_ezgif_frame_019,
+//     epd_bitmap_ezgif_frame_020,
+//     epd_bitmap_ezgif_frame_021,
+//     epd_bitmap_ezgif_frame_022,
+//     epd_bitmap_ezgif_frame_023,
+//     epd_bitmap_ezgif_frame_024,
+//     epd_bitmap_ezgif_frame_025,
+//     epd_bitmap_ezgif_frame_026,
+//     epd_bitmap_ezgif_frame_027,
+//     epd_bitmap_ezgif_frame_028,
+//     epd_bitmap_ezgif_frame_029,
+//     epd_bitmap_ezgif_frame_030,
+//     epd_bitmap_ezgif_frame_031,
+//     epd_bitmap_ezgif_frame_032,
+//     epd_bitmap_ezgif_frame_033,
+//     epd_bitmap_ezgif_frame_034,
+//     epd_bitmap_ezgif_frame_035,
+//     epd_bitmap_ezgif_frame_036,
+//     epd_bitmap_ezgif_frame_037,
+//     epd_bitmap_ezgif_frame_038,
+//     epd_bitmap_ezgif_frame_039,
+//     epd_bitmap_ezgif_frame_040,
+//     epd_bitmap_ezgif_frame_041,
+//     epd_bitmap_ezgif_frame_042,
+//     epd_bitmap_ezgif_frame_043,
+//     epd_bitmap_ezgif_frame_044,
+//     epd_bitmap_ezgif_frame_045,
+//     epd_bitmap_ezgif_frame_046,
+//     epd_bitmap_ezgif_frame_047,
+//     epd_bitmap_ezgif_frame_048,
+//     epd_bitmap_ezgif_frame_049,
+//     epd_bitmap_ezgif_frame_050,
+//     epd_bitmap_ezgif_frame_051,
+//     epd_bitmap_ezgif_frame_052,
+//     epd_bitmap_ezgif_frame_053,
+//     epd_bitmap_ezgif_frame_054,
+//     epd_bitmap_ezgif_frame_055,
+//     epd_bitmap_ezgif_frame_056,
+//     epd_bitmap_ezgif_frame_057,
+//     epd_bitmap_ezgif_frame_058,
+//     epd_bitmap_ezgif_frame_059,
+//     epd_bitmap_ezgif_frame_060,
+//     epd_bitmap_ezgif_frame_061,
+//     epd_bitmap_ezgif_frame_062,
+//     epd_bitmap_ezgif_frame_063,
+//     epd_bitmap_ezgif_frame_064,
+//     epd_bitmap_ezgif_frame_065,
+//     epd_bitmap_ezgif_frame_066,
+//     epd_bitmap_ezgif_frame_067,
+//     epd_bitmap_ezgif_frame_068,
+//     epd_bitmap_ezgif_frame_069,
+//     epd_bitmap_ezgif_frame_070,
+//     epd_bitmap_ezgif_frame_071,
+//     epd_bitmap_ezgif_frame_072,
+//     epd_bitmap_ezgif_frame_073,
+//     epd_bitmap_ezgif_frame_074,
+//     epd_bitmap_ezgif_frame_075,
+//     epd_bitmap_ezgif_frame_076,
+//     epd_bitmap_ezgif_frame_077,
+//     epd_bitmap_ezgif_frame_078,
+//     epd_bitmap_ezgif_frame_079,
+//     epd_bitmap_ezgif_frame_080,
+//     epd_bitmap_ezgif_frame_081,
+//     epd_bitmap_ezgif_frame_082,
+//     epd_bitmap_ezgif_frame_083,
+//     epd_bitmap_ezgif_frame_084,
+//     epd_bitmap_ezgif_frame_085,
+//     epd_bitmap_ezgif_frame_086,
+//     epd_bitmap_ezgif_frame_087,
+//     epd_bitmap_ezgif_frame_088,
+//     epd_bitmap_ezgif_frame_089,
+//     epd_bitmap_ezgif_frame_090,
+//     epd_bitmap_ezgif_frame_091,
+//     epd_bitmap_ezgif_frame_092,
+//     epd_bitmap_ezgif_frame_093,
+//     epd_bitmap_ezgif_frame_094,
+//     epd_bitmap_ezgif_frame_095,
+//     epd_bitmap_ezgif_frame_096,
+//     epd_bitmap_ezgif_frame_097,
+//     epd_bitmap_ezgif_frame_098,
+//     epd_bitmap_ezgif_frame_099,
+//     epd_bitmap_ezgif_frame_100};
 
 void clear()
 {
@@ -378,15 +378,15 @@ void displayImage(int width, int height, unsigned int *src)
         }
     }
 }
-void displayVideo(int width, int height)
-{
-    clearScreen();
-    for (int i = 0; i < FRAMES_LEN; i++)
-    {
-        displayImage(width, height, frames[i]);
-        wait_msec(70000);
-    }
-}
+// void displayVideo(int width, int height)
+// {
+//     clearScreen();
+//     for (int i = 0; i < FRAMES_LEN; i++)
+//     {
+//         displayImage(width, height, frames[i]);
+//         wait_msec(70000);
+//     }
+// }
 void handleReq(char *input)
 {
     toLowerCase(input);
@@ -427,11 +427,13 @@ void handleReq(char *input)
     }
     else if (isEqual(input, "video") == 1)
     {
-        displayVideo(640, 360);
+        // displayVideo(640, 360);
     }
     else if (isEqual(word, "setcolor") == 1)
     {
         setColor(input);
+    }else if (isEqual(input, "game") == 1) {
+        gamePlay();
     }
     uart_puts("\033[0GMyOS> ");
 }
