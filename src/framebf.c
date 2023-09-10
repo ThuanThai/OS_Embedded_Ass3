@@ -1,5 +1,5 @@
 #include "framebf.h"
-
+#include "glypChar.h"
 /**
  * Set screen resolution to 1024x768
  */
@@ -120,6 +120,27 @@ void drawLineARGB32(int x1, int y1, int x2, int y2, unsigned int attr)
     {
         int y = m * x + b;
         drawPixelARGB32(x, y, attr);
+    }
+}
+
+void drawChar(char ch, int x, int y, unsigned int attr)
+{
+    int pos = ch - 65;
+    int pixCount = 0;
+    for (int i = y; i < y + 50; i++)
+    {
+        for (int j = x; j < x + 50; j++)
+        {
+            if (font[pos][pixCount] == 0x00000000)
+            {
+                drawPixelARGB32(j, i, attr);
+                pixCount++;
+            }
+            else
+            {
+                pixCount++;
+            }
+        }
     }
 }
 

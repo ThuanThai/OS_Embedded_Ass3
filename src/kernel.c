@@ -18,7 +18,51 @@ const char *available_cmds[] = {
 	"showinfo",
 	"clear",
 };
+void displayName()
+{
+	drawChar('N', 150, 125, 0x00FF5733); // Coral
+	drawChar('G', 200, 125, 0x00E74C3C); // Alizarin
+	drawChar('U', 250, 125, 0x00F39C12); // Sunflower
+	drawChar('Y', 300, 125, 0x00F1C40F); // Emerald
+	drawChar('E', 350, 125, 0x0039B552); // Nephritis
+	drawChar('N', 400, 125, 0x002ECC71); // Green Sea
+	drawChar('H', 500, 125, 0x00E08283); // Indian Red
+	drawChar('U', 550, 125, 0x00CD6155); // Dark Coral
+	drawChar('N', 600, 125, 0x00D98880); // Antique Ruby
+	drawChar('G', 650, 125, 0x00D98880); // Antique Ruby
+	drawChar('A', 750, 125, 0x00FF5733); // Coral
+	drawChar('N', 800, 125, 0x00E74C3C); // Alizarin
+	drawChar('H', 850, 125, 0x00CD6155); // Dark Coral
 
+	drawChar('H', 150, 200, 0x00F1C40F); // Emerald
+	drawChar('O', 200, 200, 0x0039B552); // Nephritis
+	drawChar('A', 250, 200, 0x00F39C12); // Sunflower
+	drawChar('N', 300, 200, 0x00E74C3C); // Alizarin
+	drawChar('G', 350, 200, 0x00E74C3C); // Alizarin
+	drawChar('P', 450, 200, 0x00D98880); // Antique Ruby
+	drawChar('H', 500, 200, 0x00CD6155); // Dark Coral
+	drawChar('U', 550, 200, 0x00CD6155); // Dark Coral
+	drawChar('C', 600, 200, 0x00CD6155); // Dark Coral
+
+	drawChar('T', 150, 275, 0x00F1C40F); // Emerald
+	drawChar('A', 200, 275, 0x0039B552); // Nephritis
+	drawChar('N', 250, 275, 0x00F39C12); // Sunflower
+	drawChar('P', 350, 275, 0x00E74C3C); // Alizarin
+	drawChar('H', 400, 275, 0x00E74C3C); // Alizarin
+	drawChar('O', 450, 275, 0x00E74C3C); // Alizarin
+	drawChar('N', 500, 275, 0x00E74C3C); // Alizarin
+	drawChar('G', 550, 275, 0x00E74C3C); // Alizarin
+
+	drawChar('T', 150, 350, 0x00FF5733); // Coral
+	drawChar('H', 200, 350, 0x00FF5733); // Coral
+	drawChar('A', 250, 350, 0x00F1C40F); // Emerald
+	drawChar('I', 300, 350, 0x00D98880); // Antique Ruby
+	drawChar('T', 400, 350, 0x0039B552); // Nephritis
+	drawChar('H', 450, 350, 0x00FF5733); // Coral
+	drawChar('U', 500, 350, 0x00F39C12); // Sunflower
+	drawChar('A', 550, 350, 0x00F1C40F); // Emerald
+	drawChar('N', 600, 350, 0x00D98880); // Antique Ruby
+}
 void cli()
 {
 	static char cli_buffer[MAX_CMD_SIZE];
@@ -239,6 +283,7 @@ void main()
 {
 	uart_init();
 	framebf_init();
+	displayName();
 	welcomeMessage();
 
 	// printf("Characters: %c %c \n", 'a', 65);
