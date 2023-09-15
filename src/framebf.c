@@ -144,6 +144,27 @@ void drawChar(char ch, int x, int y, unsigned int attr)
     }
 }
 
+void drawInt(char ch, int x, int y, unsigned int attr)
+{
+    int pos = ch - 48;
+    int pixCount = 0;
+    for (int i = y; i < y + 50; i++)
+    {
+        for (int j = x; j < x + 50; j++)
+        {
+            if (nums[pos][pixCount] != 0x00ffffff)
+            {
+                drawPixelARGB32(j, i, attr);
+                pixCount++;
+            }
+            else
+            {
+                pixCount++;
+            }
+        }
+    }
+}
+
 void wait_msec(unsigned int n)
 {
     register unsigned long f, t, r, expiredTime;
