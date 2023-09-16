@@ -1,6 +1,7 @@
 #include "handleKernel.h"
 #include "imagePixel.h"
 #include "question3.h"
+#include "gameContent.h"
 #define SPACE_LEN 20
 #define FRAMES_LEN 100
 scrollPosition = 0;
@@ -387,6 +388,27 @@ void displayImage(int width, int height, unsigned int *src)
 //         wait_msec(70000);
 //     }
 // }
+void pressKey()
+{
+    drawChar('P', 200, 280, 0x000000FF);
+    drawChar('R', 250, 280, 0x000000FF);
+    drawChar('E', 300, 280, 0x000000FF);
+    drawChar('S', 350, 280, 0x000000FF);
+    drawChar('S', 400, 280, 0x000000FF);
+    drawChar('A', 500, 280, 0x000000FF);
+    drawChar('N', 550, 280, 0x000000FF);
+    drawChar('Y', 600, 280, 0x000000FF);
+    drawChar('K', 700, 280, 0x000000FF);
+    drawChar('E', 750, 280, 0x000000FF);
+    drawChar('Y', 800, 280, 0x000000FF);
+    drawChar('T', 300, 350, 0x000000FF);
+    drawChar('O', 350, 350, 0x000000FF);
+    drawChar('S', 450, 350, 0x000000FF);
+    drawChar('T', 500, 350, 0x000000FF);
+    drawChar('A', 550, 350, 0x000000FF);
+    drawChar('R', 600, 350, 0x000000FF);
+    drawChar('T', 650, 350, 0x000000FF);
+}
 void handleReq(char *input)
 {
     toLowerCase(input);
@@ -432,7 +454,17 @@ void handleReq(char *input)
     else if (isEqual(word, "setcolor") == 1)
     {
         setColor(input);
-    }else if (isEqual(input, "game") == 1) {
+    }
+    else if (isEqual(input, "game") == 1)
+    {
+        clearScreen();
+        displayImage(800, 600, introGame);
+        char ch;
+        do
+        {
+            ch = uart_getc();
+        } while (ch == 0);
+        clearScreen();
         gamePlay();
     }
     uart_puts("\033[0GMyOS> ");
