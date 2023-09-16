@@ -23,62 +23,78 @@ void displayCountDown(int time)
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('5', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
     case 14:
-        clearRegion(350, 400, 400, 450);
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('4', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 13:
-        clearRegion(350, 400, 400, 450);
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('3', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 12:
-        clearRegion(350, 400, 400, 450);
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('2', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 11:
-        clearRegion(350, 400, 400, 450);
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('1', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 10:
-        clearRegion(350, 400, 400, 450);
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('0', 350, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 9:
-        clearRegion(300, 400, 350, 450);
         drawInt('9', 300, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
+        break;
 
     case 8:
-        clearRegion(300, 400, 350, 450);
         drawInt('8', 300, 400, 0x00F1C40F);
         wait_msec(1000000);
-        time--;
-        // break;
-
+        break;
+    case 7:
+        drawInt('7', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 6:
+        drawInt('6', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 5:
+        drawInt('5', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 4:
+        drawInt('4', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 3:
+        drawInt('3', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 2:
+        drawInt('2', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 1:
+        drawInt('1', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
+    case 0:
+        drawInt('0', 300, 400, 0x00F1C40F);
+        wait_msec(1000000);
+        break;
     default:
         break;
     }
@@ -297,7 +313,7 @@ void gamePlay()
     expiredTime_fire = t_fire + ((f_fire / 1000) * n_fire) / 1000;
 
     // countDown clock
-    unsigned int n_cd = 1000000;
+    unsigned int n_cd = 100000;
     register unsigned long f_cd, t_cd, r_cd, expiredTime_cd;
     asm volatile("mrs %0, cntfrq_el0"
                  : "=r"(f_cd));
@@ -346,17 +362,21 @@ void gamePlay()
 
     while (1)
     {
-        // if (r_cd >= expiredTime_cd)
-        // {
-
-        //     if (countDown > 0)
-        //     {
-        //         uart_puts(cou)
-        //         displayCountDown(countDown);
-        //         countDown--;
-        //     }
-        // }
-        displayCountDown(countDown);
+        if (r_cd >= expiredTime_cd)
+        {
+            clearRegion(300, 400, 450, 450);
+            displayCountDown(countDown);
+            asm volatile("mrs %0, cntfrq_el0"
+                         : "=r"(f_cd));
+            // Read the current counter value
+            asm volatile("mrs %0, cntpct_el0"
+                         : "=r"(t_cd));
+            // Calculate expire value for counter
+            expiredTime_cd = t_cd + ((f_cd / 1000) * n_cd) / 1000;
+            countDown--;
+        }
+        asm volatile("mrs %0, cntpct_el0"
+                     : "=r"(r_cd));
         if (r >= expiredTime)
         {
             if (last_y != y)
