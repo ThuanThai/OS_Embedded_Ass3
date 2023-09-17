@@ -11,7 +11,7 @@
 #define SPACESHIP_H 180
 #define ENEMY_W 91
 #define ENEMY_H 80
-#define MAX_ENEMY 5
+#define MAX_ENEMY 15
 #define FIRE_W_FROM_ENEMY 80
 
 void clearCurrentFire(int startX, int startY) {
@@ -279,6 +279,19 @@ void enableShot(int *shotCount, int shooting_command_arr[], int x, int y, int sh
     }
 }
 
+void enableShot_enemy(int idx, int shooting_command_arr[], int x[], int y[], int shooting_x_arr[], int shooting_y_arr[]) {
+    for (int i = 0; i < MAX_ENEMY; i++) {
+        if (i == idx) {
+            if (shooting_command_arr[i] != 1) {
+                shooting_command_arr[i] = 1;
+                shooting_x_arr[i] = x[i] - FIRE_W_FROM_ENEMY;
+                shooting_y_arr[i] = y[i];
+                break;
+            }
+        }
+    }
+}
+
 
 
 void displayEnemy(int startX, int startY) {
@@ -428,7 +441,7 @@ void gamePlay() {
     }
     int shooting_command_arr_enemy[MAX_ENEMY] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     for (int i = 0; i < MAX_ENEMY; i++) {
-        shooting_command_arr_enemy[i] = 1;
+        shooting_command_arr_enemy[i] = 0;
     }
     int shooting_x_arr_enemy[MAX_ENEMY] = {0};
     for (int i = 0; i < MAX_ENEMY; i++) {
@@ -459,6 +472,15 @@ void gamePlay() {
     asm volatile ("mrs %0, cntpct_el0" : "=r"(t_enemy));
     // Calculate expire value for counter
     expiredTime_enemy = t_enemy + ( (f_enemy/1000)*n_enemy )/1000;
+
+    unsigned int n_enemy_shoot_duration = 500000;
+    register unsigned long f_enemy_shoot_duration, t_enemy_shoot_duration, r_enemy_shoot_duration, expiredTime_enemy_shoot_duration;
+    // Get the current counter frequency (Hz)
+    asm volatile ("mrs %0, cntfrq_el0" : "=r"(f_enemy_shoot_duration));
+    // Read the current counter value
+    asm volatile ("mrs %0, cntpct_el0" : "=r"(t_enemy_shoot_duration));
+    // Calculate expire value for counter
+    expiredTime_enemy_shoot_duration = t_enemy_shoot_duration + ( (f_enemy_shoot_duration/1000)*n_enemy_shoot_duration )/1000;
     
     
 
@@ -512,7 +534,7 @@ void gamePlay() {
     // shooting from spaceship (array)
     int shooting_x = x; 
     int shooting_y = y;
-
+    int increment = 0;
     //shot tracking
     int shotCount = 0;
     while (1)
@@ -543,6 +565,23 @@ void gamePlay() {
             expiredTime = t + ( (f/1000)*n )/1000;
         }
         asm volatile ("mrs %0, cntpct_el0" : "=r"(r));
+
+        if (r_enemy_shoot_duration >= expiredTime_enemy_shoot_duration) {
+            asm volatile ("mrs %0, cntpct_el0" : "=r"(increment));
+            int idx = (increment) % MAX_ENEMY;
+            uart_puts("Random: ");
+            displayNumber((increment) % MAX_ENEMY);
+            uart_sendc('\n');
+            enableShot_enemy(idx, shooting_command_arr_enemy, x_enemy_arr, y_enemy_arr, shooting_x_arr_enemy, shooting_y_arr_enemy);
+            
+
+            asm volatile ("mrs %0, cntfrq_el0" : "=r"(f_enemy_shoot_duration));
+            // Read the current counter value
+            asm volatile ("mrs %0, cntpct_el0" : "=r"(t_enemy_shoot_duration));
+            // Calculate expire value for counter
+            expiredTime_enemy_shoot_duration = t_enemy_shoot_duration + ( (f_enemy_shoot_duration/1000)*n_enemy_shoot_duration )/1000;
+        }
+        asm volatile ("mrs %0, cntpct_el0" : "=r"(r_enemy_shoot_duration));
 
         if (r_fire >= expiredTime_fire) {
             
