@@ -12,7 +12,7 @@
 #define SPACESHIP_H 180
 #define ENEMY_W 91
 #define ENEMY_H 80
-#define MAX_ENEMY 5
+#define MAX_ENEMY 20
 #define FIRE_W_FROM_ENEMY 80
 
 void clearRegion(int startX, int startY, int endX, int endY)
@@ -24,6 +24,15 @@ void clearRegion(int startX, int startY, int endX, int endY)
             drawPixelARGB32(i, j, 0x00000000);
         }
     }
+}
+
+int shootAvaibleEnemy(int is_enemy_arr[]) {
+    for (int i = 0; i < MAX_ENEMY; i++) {
+        if (is_enemy_arr[i] == 1 ) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 void displayCountDown(int time)
@@ -317,27 +326,29 @@ void displayMultipleShots(int shooting_command_arr[], int shooting_x_arr[], int 
     }
 }
 
-void displayMultipleShots_enemy(int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[], int x_fire_arr[], int y_fire_arr[], int x_enemy_arr[], int y_enemy_arr[], int isEnemy_arr[], int x_fire_from_ship[])
+void displayMultipleShots_enemy(int shooting_command_arr[], int shooting_x_arr[], int shooting_y_arr[], int x_fire_arr[], int y_fire_arr[], int x_enemy_arr[], int y_enemy_arr[], int isEnemy_arr[], int x_fire_from_ship[], int x_spaceship, int y_spaceship, int *is_endgame)
 {
     for (int i = 0; i < MAX_ENEMY; i++)
     {
         if (shooting_command_arr[i] == 1)
         {
-            // int isHit = 0;
-            // checkHit(shooting_x_arr, x_fire_arr, shooting_y_arr, y_fire_arr, i, x_enemy_arr, y_enemy_arr, isEnemy_arr, shooting_command_arr, &isHit, x_fire_from_ship);
-            // if (isHit == 0) {
+            int is_hit = 0;
+            int spaceship_end_x = x_spaceship + SPACESHIP_W;
+            int spaceship_end_y = y_spaceship + SPACESHIP_H;
+            if (((shooting_x_arr[i] + x_fire_arr[i] >= x_spaceship) && (shooting_x_arr[i] + x_fire_arr[i] <= spaceship_end_x)) && ((shooting_y_arr[i] + y_fire_arr[i] >= y_spaceship) && (shooting_y_arr[i] + y_fire_arr[i] <= spaceship_end_y))) {
+                uart_puts("\n\n End game \n\n");
+                (*is_endgame) = 1;
+            }
 
-            // }else {
-            //     clearCurrentFire(shooting_x_arr[i] + x_fire_arr[i], shooting_y_arr[i] + y_fire_arr[i]);
-            // }
             displayFire_enemy(shooting_x_arr[i] + x_fire_arr[i], shooting_y_arr[i] + y_fire_arr[i]);
         }
     }
 }
 
-void displayNumber(int i)
+void displayNumber(int *i, int is_enemy_arr[])
 {
-    switch (i)
+
+    switch (*i)
     {
     case 0:
         uart_sendc('0');
@@ -370,7 +381,23 @@ void displayNumber(int i)
         uart_sendc('9');
         break;
     default:
+        (*i) = shootAvaibleEnemy(is_enemy_arr);
         break;
+    }
+}
+
+void enableShot_enemy(int idx, int shooting_command_arr[], int x[], int y[], int shooting_x_arr[], int shooting_y_arr[], int is_enemy[]) {
+    for (int i = 0; i < MAX_ENEMY; i++) {
+        if (i == idx) {
+            if ((shooting_command_arr[i] != 1) && (is_enemy[i] == 1)) {
+                shooting_command_arr[i] = 1;
+                shooting_x_arr[i] = x[i] - FIRE_W_FROM_ENEMY;
+                shooting_y_arr[i] = y[i];
+                break;
+            }else {
+                break;
+            }
+        }
     }
 }
 
@@ -610,7 +637,7 @@ void gamePlay()
     int shooting_command_arr_enemy[MAX_ENEMY] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     for (int i = 0; i < MAX_ENEMY; i++)
     {
-        shooting_command_arr_enemy[i] = 1;
+        shooting_command_arr_enemy[i] = 0;
     }
     int shooting_x_arr_enemy[MAX_ENEMY] = {0};
     for (int i = 0; i < MAX_ENEMY; i++)
@@ -623,6 +650,15 @@ void gamePlay()
     {
         shooting_y_arr_enemy[i] = y_enemy_arr[i];
     }
+
+    unsigned int n_enemy_shoot_duration = 500000;
+    register unsigned long f_enemy_shoot_duration, t_enemy_shoot_duration, r_enemy_shoot_duration, expiredTime_enemy_shoot_duration;
+    // Get the current counter frequency (Hz)
+    asm volatile ("mrs %0, cntfrq_el0" : "=r"(f_enemy_shoot_duration));
+    // Read the current counter value
+    asm volatile ("mrs %0, cntpct_el0" : "=r"(t_enemy_shoot_duration));
+    // Calculate expire value for counter
+    expiredTime_enemy_shoot_duration = t_enemy_shoot_duration + ( (f_enemy_shoot_duration/1000)*n_enemy_shoot_duration )/1000;
 
     // timer for enemy shoot
     unsigned int n_enemy_shoot = 30000;
@@ -718,10 +754,15 @@ void gamePlay()
     // shot tracking
     int shotCount = 0;
     int countDown = 15;
+    int increment = 0;
+    int is_endgame = 0;
 
     while (1)
     {
-
+        if ((is_endgame)) {
+            break;
+        }
+        
         if (r >= expiredTime)
         {
             if (last_y != y)
@@ -740,7 +781,7 @@ void gamePlay()
             displayMultipleEnemy(isEnemy_arr, x_enemy_arr, y_enemy_arr);
             // shot display code
             displayMultipleShots(shooting_command_arr, shooting_x_arr, shooting_y_arr, x_fire_arr, y_fire_arr, x_enemy_arr, y_enemy_arr, isEnemy_arr, x_fire_from_ship);
-            displayMultipleShots_enemy(shooting_command_arr_enemy, shooting_x_arr_enemy, shooting_y_arr_enemy, x_fire_arr_enemy, y_fire_arr_enemy, x_fire_arr_enemy, y_enemy_arr, isEnemy_arr, x_enemy_arr);
+            displayMultipleShots_enemy(shooting_command_arr_enemy, shooting_x_arr_enemy, shooting_y_arr_enemy, x_fire_arr_enemy, y_fire_arr_enemy, x_fire_arr_enemy, y_enemy_arr, isEnemy_arr, x_enemy_arr, x, y, &is_endgame);
             asm volatile("mrs %0, cntfrq_el0"
                          : "=r"(f));
             // Read the current counter value
@@ -784,24 +825,29 @@ void gamePlay()
         }
         asm volatile("mrs %0, cntpct_el0"
                      : "=r"(r_enemy));
-        // if (r_cd >= expiredTime_cd)
-        // {
-        //     clearRegion(300, 400, 450, 450);
-        //     if (countDown > 0)
-        //     {
-        //         displayCountDown(countDown);
-        //     }
-        //     asm volatile("mrs %0, cntfrq_el0"
-        //                  : "=r"(f_cd));
-        //     // Read the current counter value
-        //     asm volatile("mrs %0, cntpct_el0"
-        //                  : "=r"(t_cd));
-        //     // Calculate expire value for counter
-        //     expiredTime_cd = t_cd + ((f_cd / 1000) * n_cd) / 1000;
-        //     countDown--;
-        // }
-        // asm volatile("mrs %0, cntpct_el0"
-        //              : "=r"(r_cd));
+        
+
+        if (r_enemy_shoot_duration >= expiredTime_enemy_shoot_duration) {
+            asm volatile ("mrs %0, cntpct_el0" : "=r"(increment));
+            
+            int idx = (increment/10) % MAX_ENEMY;
+            if (increment == 0) {
+                uart_puts("Is 0 \n");
+            }
+            uart_puts("Random: ");
+            displayNumber(&idx, isEnemy_arr);
+            uart_sendc('\n');
+            enableShot_enemy(idx, shooting_command_arr_enemy, x_enemy_arr, y_enemy_arr, shooting_x_arr_enemy, shooting_y_arr_enemy, isEnemy_arr);
+            
+
+            asm volatile ("mrs %0, cntfrq_el0" : "=r"(f_enemy_shoot_duration));
+            // Read the current counter value
+            asm volatile ("mrs %0, cntpct_el0" : "=r"(t_enemy_shoot_duration));
+            // Calculate expire value for counter
+            expiredTime_enemy_shoot_duration = t_enemy_shoot_duration + ( (f_enemy_shoot_duration/1000)*n_enemy_shoot_duration )/1000;
+        }
+        asm volatile ("mrs %0, cntpct_el0" : "=r"(r_enemy_shoot_duration));
+
         if (!(UART0_FR & UART0_FR_RXFE))
         {
             char c = (unsigned char)(UART0_DR);
