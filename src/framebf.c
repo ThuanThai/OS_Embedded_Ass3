@@ -165,6 +165,18 @@ void drawInt(char ch, int x, int y, unsigned int attr)
     }
 }
 
+void clearInt(char ch, int x, int y) {
+    int pos = ch - 48;
+    int pixCount = 0;
+    for (int i = y; i < y + 50; i++)
+    {
+        for (int j = x; j < x + 50; j++)
+        {
+            drawPixelARGB32(j, i, 0x00000000);
+        }
+    }
+}
+
 void wait_msec(unsigned int n)
 {
     register unsigned long f, t, r, expiredTime;
