@@ -1,5 +1,6 @@
 #include "gpio.h"
 
+#define AUX_MU_LSR ((volatile unsigned int *)(MMIO_BASE + 0x00215054))
 /* PL011 UART (UART0) registers */
 #define UART0_BASE (MMIO_BASE + 0x201000)
 
@@ -155,3 +156,5 @@ char uart_getc();
 void uart_puts(char *s);
 void uart_hex(unsigned int d);
 void uart_dec(int num);
+unsigned char getAnyKey();
+unsigned int uart_isReadByteReady();

@@ -67,6 +67,11 @@ void uart_init()
     UART0_CR = 0x301; // enable Tx, Rx, FIFO
 }
 
+unsigned int uart_isReadByteReady()
+{
+    return (*AUX_MU_LSR & 0x01);
+}
+
 /**
  * Send a character
  */
@@ -184,4 +189,12 @@ void uart_dec(int num)
     {
         uart_sendc(buffer[i]);
     }
+}
+
+unsigned char getAnyKey()
+{
+    volatile unsigned char ch = 0; // Declare ch as volatile
+    if (uart_isReadByteReady())
+        ch = uart_getc();
+    return ch;
 }
