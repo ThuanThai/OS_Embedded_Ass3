@@ -35,6 +35,90 @@ int shootAvaibleEnemy(int is_enemy_arr[]) {
     return 0;
 }
 
+void clearCountDown(int time) {
+    switch (time)
+    {
+    case 15:
+        clearInt('1', 300, 400);
+        clearInt('5', 350, 400);
+        // wait_msec(1000000);
+        break;
+    case 14:
+        clearInt('1', 300, 400);
+        clearInt('4', 350, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 13:
+        clearInt('1', 300, 400);
+        clearInt('3', 350, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 12:
+        clearInt('1', 300, 400);
+        clearInt('2', 350, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 11:
+        clearInt('1', 300, 400);
+        clearInt('1', 350, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 10:
+        clearInt('1', 300, 400);
+        clearInt('0', 350, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 9:
+        clearInt('9', 300, 400);
+        // wait_msec(1000000);
+        break;
+
+    case 8:
+        clearInt('8', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 7:
+        clearInt('7', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 6:
+        clearInt('6', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 5:
+        clearInt('5', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 4:
+        clearInt('4', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 3:
+        clearInt('3', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 2:
+        clearInt('2', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 1:
+        clearInt('1', 300, 400);
+        // wait_msec(1000000);
+        break;
+    case 0:
+        clearInt('0', 300, 400);
+        // wait_msec(1000000);
+        break;
+    default:
+        break;
+    }
+}
+
 void displayCountDown(int time)
 {
     switch (time)
@@ -42,78 +126,78 @@ void displayCountDown(int time)
     case 15:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('5', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 14:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('4', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 13:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('3', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 12:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('2', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 11:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('1', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 10:
         drawInt('1', 300, 400, 0x00F1C40F);
         drawInt('0', 350, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 9:
         drawInt('9', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
 
     case 8:
         drawInt('8', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 7:
         drawInt('7', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 6:
         drawInt('6', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 5:
         drawInt('5', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 4:
         drawInt('4', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 3:
         drawInt('3', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 2:
         drawInt('2', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 1:
         drawInt('1', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     case 0:
         drawInt('0', 300, 400, 0x00F1C40F);
-        wait_msec(1000000);
+        // wait_msec(1000000);
         break;
     default:
         break;
@@ -337,7 +421,7 @@ void displayMultipleShots_enemy(int shooting_command_arr[], int shooting_x_arr[]
             int spaceship_end_y = y_spaceship + SPACESHIP_H;
             if (((shooting_x_arr[i] + x_fire_arr[i] >= x_spaceship) && (shooting_x_arr[i] + x_fire_arr[i] <= spaceship_end_x)) && ((shooting_y_arr[i] + y_fire_arr[i] >= y_spaceship) && (shooting_y_arr[i] + y_fire_arr[i] <= spaceship_end_y))) {
                 uart_puts("\n\n End game \n\n");
-                (*is_endgame) = 1;
+                // (*is_endgame) = 1;
             }
 
             displayFire_enemy(shooting_x_arr[i] + x_fire_arr[i], shooting_y_arr[i] + y_fire_arr[i]);
@@ -685,7 +769,7 @@ void gamePlay()
 
     //----------------------------------------------------------------- MARK: setup for shots --------------------------------------------------------------------------
     // for timer purpose
-    unsigned int n = 60;
+    unsigned int n = 16;
     register unsigned long f, t, r, expiredTime;
     // Get the current counter frequency (Hz)
     asm volatile("mrs %0, cntfrq_el0"
@@ -706,6 +790,17 @@ void gamePlay()
                  : "=r"(t_fire));
     // Calculate expire value for counter
     expiredTime_fire = t_fire + ((f_fire / 1000) * n_fire) / 1000;
+
+
+    unsigned int n_count_down = 1000000;
+    register unsigned long f_count_down, t_count_down, r_count_down, expiredTime_count_down;
+    asm volatile("mrs %0, cntfrq_el0"
+                 : "=r"(f_count_down));
+    // Read the current counter value
+    asm volatile("mrs %0, cntpct_el0"
+                 : "=r"(t_count_down));
+    // Calculate expire value for counter
+    expiredTime_count_down = t_count_down + ((f_count_down / 1000) * n_count_down) / 1000;
 
     // countDown clock
     unsigned int n_cd = 100000;
@@ -756,6 +851,8 @@ void gamePlay()
     int countDown = 15;
     int increment = 0;
     int is_endgame = 0;
+    int count_down_time = 15;
+    int last_count_down_time = count_down_time;
 
     while (1)
     {
@@ -771,12 +868,17 @@ void gamePlay()
                 last_y = y;
             }
 
+            if (last_count_down_time != count_down_time) {
+                clearCountDown(last_count_down_time);
+            }
+
             // clear multiple enemy
             clearMultipleEnemy(last_y_enemy_arr, y_enemy_arr, x_enemy_arr, isEnemy_arr);
             // shot clearing code
             clearMultipleShot(x_fire_arr, y_fire_arr, last_x_fire_arr, last_y_arr, shooting_command_arr, shooting_x_arr, shooting_y_arr, x, y);
             clearMultipleShot_enemy(x_fire_arr_enemy, y_fire_arr_enemy, last_x_fire_arr_enemy, last_y_arr_enemy, shooting_command_arr_enemy, shooting_x_arr_enemy, shooting_y_arr_enemy, x_enemy_arr, y_enemy_arr);
             displaySpcaeShip(x, y);
+            displayCountDown(count_down_time);
 
             displayMultipleEnemy(isEnemy_arr, x_enemy_arr, y_enemy_arr);
             // shot display code
@@ -809,6 +911,7 @@ void gamePlay()
         }
         asm volatile("mrs %0, cntpct_el0"
                      : "=r"(r_fire));
+        
 
         if (r_enemy >= expiredTime_enemy)
         {
@@ -826,6 +929,19 @@ void gamePlay()
         asm volatile("mrs %0, cntpct_el0"
                      : "=r"(r_enemy));
         
+        if (r_count_down >= expiredTime_count_down) {
+            count_down_time -= 1;
+            if (count_down_time < 0) {
+                count_down_time = 0;
+            }
+            asm volatile("mrs %0, cntfrq_el0" : "=r"(f_count_down));
+            // Read the current counter value
+            asm volatile("mrs %0, cntpct_el0" : "=r"(t_count_down));
+            // Calculate expire value for counter
+            expiredTime_count_down = t_count_down + ((f_count_down / 1000) * n_count_down) / 1000;
+        }
+        asm volatile("mrs %0, cntpct_el0"
+                     : "=r"(r_count_down));
 
         if (r_enemy_shoot_duration >= expiredTime_enemy_shoot_duration) {
             asm volatile ("mrs %0, cntpct_el0" : "=r"(increment));
