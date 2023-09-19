@@ -21,3 +21,5 @@ void drawChar(char ch, int x, int y, unsigned attr);
 void drawInt(char ch, int x, int y, unsigned intattr);
 void wait_msec(unsigned int n);
 void clearInt(char ch, int x, int y);
+void drawLineVert(int x, int y1, int y2, unsigned int attr);
+void drawIcon(int x_start, int y_start, int size, unsigned int obj[]);

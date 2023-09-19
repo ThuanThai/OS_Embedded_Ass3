@@ -12,6 +12,10 @@ unsigned int *images[] = {
     image2, // Pointer to your image data 2
     // Add more image pointers as needed
 };
+unsigned int *gameContent[] = {
+    heartIcon,
+};
+
 // unsigned int *frames[] = {
 //     epd_bitmap_ezgif_frame_001,
 //     epd_bitmap_ezgif_frame_002,
@@ -379,6 +383,18 @@ void displayImage(int width, int height, unsigned int *src)
         }
     }
 }
+void displayOffsetImage(int width, int height, int offsetX, int offsetY, unsigned int *src)
+{
+    int i = 0;
+    for (int y = offsetY; y < (offsetY + height); y++)
+    {
+        for (int x = offsetX; x < (offsetX + width); x++)
+        {
+            drawPixelARGB32(x, y, src[i]);
+            i++;
+        }
+    }
+}
 // void displayVideo(int width, int height)
 // {
 //     clearScreen();
@@ -458,7 +474,7 @@ void handleReq(char *input)
     else if (isEqual(input, "game") == 1)
     {
         clearScreen();
-        displayImage(800, 600, introGame);
+        displayOffsetImage(800, 600, 162, 50, introGame);
         char ch;
         do
         {

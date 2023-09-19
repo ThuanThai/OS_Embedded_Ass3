@@ -165,7 +165,8 @@ void drawInt(char ch, int x, int y, unsigned int attr)
     }
 }
 
-void clearInt(char ch, int x, int y) {
+void clearInt(char ch, int x, int y)
+{
     int pos = ch - 48;
     int pixCount = 0;
     for (int i = y; i < y + 50; i++)
@@ -195,4 +196,25 @@ void wait_msec(unsigned int n)
         asm volatile("mrs %0, cntpct_el0"
                      : "=r"(r));
     } while (r < expiredTime);
+}
+
+void drawLineVert(int x, int y1, int y2, unsigned int attr)
+{
+    for (int i = y1; i < y2; i++)
+    {
+        drawPixelARGB32(x, i, attr);
+    }
+}
+
+void drawIcon(int x_start, int y_start, int size, unsigned int obj[])
+{
+    int i = 0;
+    for (int y = y_start; y < (y_start + size); y++)
+    {
+        for (int x = x_start; x < (x_start + size); x++)
+        {
+            drawPixelARGB32(x, y, obj[i]);
+            i++;
+        }
+    }
 }
