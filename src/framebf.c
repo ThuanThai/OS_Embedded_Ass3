@@ -218,3 +218,16 @@ void drawIcon(int x_start, int y_start, int size, unsigned int obj[])
         }
     }
 }
+
+void drawBlankIcon(int x_start, int y_start, int size)
+{
+    int i = 0;
+    for (int y = y_start; y < (y_start + size); y++)
+    {
+        for (int x = x_start; x < (x_start + size); x++)
+        {
+            drawPixelARGB32(x, y, 0x00000000);
+            i++;
+        }
+    }
+}
